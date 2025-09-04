@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/colors_manger/colors.dart';
+import '../../core/widgets/svg/svg_flags.dart';
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
 
