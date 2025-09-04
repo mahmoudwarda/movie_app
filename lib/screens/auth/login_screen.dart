@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/colors_manger/colors.dart';
+import '../../core/widgets/svg/svg_flags.dart'; // تأكد إنك محتاجه
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
 
@@ -10,7 +11,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil for responsiveness
     ScreenUtil.init(context, designSize: const Size(360, 690));
 
     return Scaffold(
@@ -73,8 +73,7 @@ class LoginScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgetPasswordScreen()),
+                    MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()),
                   );
                 },
                 child: const Text(
@@ -118,8 +117,7 @@ class LoginScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()),
+                      MaterialPageRoute(builder: (context) => const RegisterScreen()),
                     );
                   },
                   child: const Text(
