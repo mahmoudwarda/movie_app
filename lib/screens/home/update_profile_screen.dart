@@ -28,7 +28,7 @@ class UpdateProfileScreen extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  // Avatar
+
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.grey[900],
