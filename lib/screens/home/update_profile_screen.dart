@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie/logic/logic_logic/update_profile_logic.dart';
 import '../../core/bottoms/text_feild.dart';
 import '../../core/colors_manger/colors.dart';
 import '../../core/bottoms/buttons.dart';
@@ -8,7 +9,8 @@ class UpdateProfileScreen extends StatelessWidget {
 
   final nameController = TextEditingController(text: "John Safwat");
   final phoneController = TextEditingController(text: "0120000000");
-  final passwordController = TextEditingController();
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,6 @@ class UpdateProfileScreen extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  // Avatar
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.grey[900],
@@ -47,32 +48,38 @@ class UpdateProfileScreen extends StatelessWidget {
                   CustomTextField(hint: "Name", controller: nameController),
                   const SizedBox(height: 15),
 
-                  // Phone Number
-                  CustomTextField(hint: "Phone Number", controller: phoneController),
+                  // Phone
+                  CustomTextField(
+                      hint: "Phone Number", controller: phoneController),
                   const SizedBox(height: 15),
 
-                  // Reset Password (clickable text)
-                  GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Reset Password pressed")),
+                  // Old Password
+                  CustomTextField(
+                      hint: "Old Password", controller: oldPasswordController),
+                  const SizedBox(height: 15),
+
+                  // New Password
+                  CustomTextField(
+                      hint: "New Password", controller: newPasswordController),
+                  const SizedBox(height: 20),
+
+                  // Reset Password Button
+                  CustomButton(
+                    label: "Reset Password",
+                    onPressed: () {
+                      UpdateProfileLogic.resetPassword(
+                        context,
+                        oldPasswordController.text,
+                        newPasswordController.text,
                       );
                     },
-                    child: const Text(
-                      "Reset Password",
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 20),
                 ],
               ),
             ),
 
-            // Buttons at the bottom
+            // Bottom buttons
             Padding(
               padding: const EdgeInsets.only(bottom: 33),
               child: Column(
@@ -82,17 +89,18 @@ class UpdateProfileScreen extends StatelessWidget {
                     backgroundColor: AppColors.red,
                     textColor: Colors.white,
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Delete pressed"), backgroundColor: AppColors.red),
-                      );
+                      UpdateProfileLogic.deleteAccount(context);
                     },
                   ),
                   const SizedBox(height: 10),
                   CustomButton(
                     label: "Update Data",
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Update pressed"), backgroundColor: AppColors.yellow),
+                      UpdateProfileLogic.updateProfile(
+                        context,
+                        nameController.text,
+                        phoneController.text,
+                        newPasswordController.text,
                       );
                     },
                   ),
