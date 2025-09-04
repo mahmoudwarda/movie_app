@@ -22,11 +22,6 @@ class AppRoutes {
 
   // All routes
   static Map<String, WidgetBuilder> routes = {
-    splash: (context) => SplashScreen(),
-    onboarding: (context) => const OnboardingScreen(),
-    login: (context) => const LoginScreen(),
-    register: (context) => const RegisterScreen(),
-    forgetPassword: (context) => const ForgetPasswordScreen(),
-    updateProfile: (context) => UpdateProfileScreen(),
+    onboarding: (context) =>  OnboardingScreen(),
   };
 }
