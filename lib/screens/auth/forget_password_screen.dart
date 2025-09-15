@@ -1,72 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie/logic/logic_logic/forget_password.dart';
-import '../../core/bottoms/text_feild.dart';
 import '../../core/colors_manger/colors.dart';
+import '../../core/bottoms/text_feild.dart';
 import '../../core/bottoms/buttons.dart';
 
+
 class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({super.key});
+  ForgetPasswordScreen({super.key});
+
+  final emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-
     return Scaffold(
       backgroundColor: AppColors.black,
       appBar: AppBar(
-        title: Text(
-          "Forget Password",
-          style: TextStyle(fontSize: 20.sp),
-        ),
+        title: const Text("Forget Password"),
         backgroundColor: AppColors.black,
-        foregroundColor: AppColors.yellow,
         elevation: 0,
-        centerTitle: true,
+        iconTheme: const IconThemeData(color: AppColors.white),
+        titleTextStyle: const TextStyle(color: AppColors.white, fontSize: 20),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // صورة فوق
-              Image.asset(
-                "assets/images/forgot_password.png",
-                height: 200.h,
-                fit: BoxFit.contain,
-              ),
-              SizedBox(height: 30.h),
-
-              // حقل إدخال الإيميل
-              CustomTextField(
-                hint: "Email",
-                controller: emailController,
-                prefixIcon: Icons.email_outlined,
-              ),
-              SizedBox(height: 30.h),
-
-              // زرار Verify
-              CustomButton(
-                label: "Verify Email",
-                onPressed: () {
-                  if (emailController.text.isNotEmpty) {
-                    ForgetPasswordLogic.handleForgetPassword(
-                      context,
-                      emailController.text,
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Please enter your email"),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            CustomTextField(
+              hint: "Enter your email",
+              controller: emailController,
+            ),
+            const SizedBox(height: 20),
+            CustomButton(
+              label: "Send Reset Link",
+              onPressed: () {
+                ForgetPasswordLogic.sendResetLink(
+                  context,
+                  emailController.text,
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

@@ -6,7 +6,7 @@ class ApiService {
   static const String token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
-
+  /// ✅ Update Profile
   static Future<String?> updateProfile(
       String name, String phone, String password) async {
     final url = Uri.parse('$userBaseUrl/user/update');
@@ -98,4 +98,3 @@ class ApiService {
     }
   }
 }
-
