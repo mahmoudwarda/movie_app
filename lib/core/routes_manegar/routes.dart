@@ -21,7 +21,7 @@ class AppRoutes {
   static const String updateProfile = '/update_profile';
 
   // All routes
-  static Map<String, WidgetBuilder> routes = {
+  static Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
     splash: (context) => const SplashScreen(),
     onboarding: (context) => const OnboardingScreen(),
 
@@ -32,6 +32,6 @@ class AppRoutes {
 
     // Home
     home: (context) => const LoginScreen(), // ضع هنا الـ home screen الحقيقي
-    updateProfile: (context) => const UpdateProfileScreen(),
+    updateProfile: (context) => UpdateProfileScreen(),
   };
 }
