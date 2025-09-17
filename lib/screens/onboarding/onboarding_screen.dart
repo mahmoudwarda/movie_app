@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:movie/core/routes_manegar/routes.dart';
 import '../../core/models/onboarding/onboarding_model.dart';
+import '../../core/routes_manegar/routes.dart';
 import '../../featuers_onbording/onboarding_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -34,12 +34,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _finishOnboarding() {
-    Navigator.pushReplacementNamed(context, AppRoutes.login);
+    Navigator.pushReplacementNamed(context, AppRoutes.register);
   }
 
   @override
   Widget build(BuildContext context) {
-    // Initializing ScreenUtil
     return ScreenUtilInit(
       designSize: const Size(430, 932),
       builder: (context, child) {

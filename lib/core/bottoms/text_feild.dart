@@ -4,9 +4,9 @@ import '../colors_manger/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
-  final TextEditingController controller;
   final bool obscureText;
   final IconData? prefixIcon;
+  final TextEditingController controller; // عشان نمسك القيم
 
   const CustomTextField({
     super.key,
