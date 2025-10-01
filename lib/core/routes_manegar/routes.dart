@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../../screens/auth/forget_password_screen.dart';
 import '../../screens/auth/login_screen.dart';
 import '../../screens/auth/register_screen.dart';
-import '../../screens/home/update_profile_screen.dart';
+import '../../screens/auth/update_profile_screen.dart';
+import '../../screens/home/home_screen.dart';
 import '../../screens/onboarding/onboarding_screen.dart';
 import '../../screens/splash/spalsh_screen.dart';
 
@@ -19,19 +21,17 @@ class AppRoutes {
   // Home
   static const String home = '/home';
   static const String updateProfile = '/update_profile';
+  static const String homeScreen = '/home_Screen';
 
-  // All routes
-  static Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
-    splash: (context) => const SplashScreen(),
-    onboarding: (context) => const OnboardingScreen(),
 
-    // Auth
-    login: (context) => const LoginScreen(),
-    register: (context) => const RegisterScreen(),
-    forgetPassword: (context) => const ForgetPasswordScreen(),
-
-    // Home
-    home: (context) => const LoginScreen(), // ضع هنا الـ home screen الحقيقي
+  static Map<String, WidgetBuilder> routes = {
+    splash: (context) => SplashScreen(),
+    onboarding: (context) => OnboardingScreen(),
+    login: (context) => LoginScreen(),
+    register: (context) => RegisterScreen(),
+    forgetPassword: (context) => ForgetPasswordScreen(),
     updateProfile: (context) => UpdateProfileScreen(),
+    homeScreen: (context) => HomeScreenTab(),
+
   };
 }

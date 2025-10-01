@@ -16,10 +16,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const OnboardingScreen()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+        );
+      }
     });
   }
 
@@ -32,27 +34,35 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const Spacer(flex: 4),
+
             Image.asset(
               "assets/images/logo.png",
               height: 150.h,
               width: 150.w,
               fit: BoxFit.contain,
             ),
-            const SizedBox(height: 50),
+
+            const Spacer(flex: 3),
+
             Image.asset(
               "assets/images/route.png",
-              height: 80.h,
+              height: 50.h,
               fit: BoxFit.contain,
             ),
-            SizedBox(height: 12.h),
+
+            SizedBox(height: 10.h),
+
             Text(
               "Supervised by Mohamed Nabil",
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
                 color: AppColors.white,
               ),
             ),
+
+            SizedBox(height: 24.h),
           ],
         ),
       ),

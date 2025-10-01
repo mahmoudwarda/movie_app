@@ -2,16 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/colors_manger/colors.dart';
-import '../../core/widgets/svg/svg_flags.dart' hide SvgFlag;
+import '../../core/utils/api_service.dart';
 import 'forget_password_screen.dart';
 import 'register_screen.dart';
+import '../home/home_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+  bool _isPasswordVisible = false;
+
+  Future<void> _login() async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter email and password")),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      final response = await ApiService.login(email: email, password: password);
+
+      if (response != null && response.token != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("✅ Login Successful")),
+        );
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreenTab()),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login failed: ${response?.parsedMessage ?? 'Unknown error'}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Login Failed: $e")),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // Initialize ScreenUtil for responsiveness
     ScreenUtil.init(context, designSize: const Size(360, 690));
 
     return Scaffold(
@@ -31,8 +83,9 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 18.h),
 
-            // Email
             TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.email, color: AppColors.white),
                 hintText: "Email",
@@ -48,12 +101,22 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
 
-            // Password
             TextField(
-              obscureText: true,
+              controller: passwordController,
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.lock, color: AppColors.white),
-                suffixIcon: const Icon(Icons.visibility_off, color: AppColors.white),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      color: AppColors.white
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
                 hintText: "Password",
                 hintStyle: const TextStyle(color: AppColors.white),
                 filled: true,
@@ -67,15 +130,13 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
 
-            // Forget password
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const ForgetPasswordScreen()),
+                    MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()),
                   );
                 },
                 child: const Text(
@@ -86,7 +147,6 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
 
-            // Login button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -98,29 +158,23 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                 ),
-                onPressed: () {},
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontSize: 18.sp),
-                ),
+                onPressed: isLoading ? null : _login,
+                child: isLoading
+                    ? const CircularProgressIndicator(color: AppColors.black)
+                    : Text("Login", style: TextStyle(fontSize: 18.sp)),
               ),
             ),
             SizedBox(height: 20.h),
 
-            // Create account
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Don’t Have Account? ",
-                  style: TextStyle(color: AppColors.grey),
-                ),
+                const Text("Don’t Have Account? ", style: TextStyle(color: AppColors.white)),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegisterScreen()),
+                      MaterialPageRoute(builder: (context) => const RegisterScreen()),
                     );
                   },
                   child: const Text(
@@ -135,7 +189,6 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
 
-            // Divider OR
             Row(
               children: [
                 Expanded(child: Divider(color: Colors.grey[600], thickness: 1.h)),
@@ -148,7 +201,6 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
 
-            // Google button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -160,37 +212,23 @@ class LoginScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.r),
                   ),
                 ),
-                onPressed: () {},
-                icon: SvgPicture.asset(
-                  'assets/images/google.svg',
-                  height: 24.h,
-                  width: 24.w,
+                onPressed: () {
+                },
+                icon: Builder(
+                  builder: (context) {
+                    try {
+                      return SvgPicture.asset(
+                        'assets/images/google.svg',
+                        height: 24.h,
+                        width: 24.w,
+                        colorFilter: ColorFilter.mode(AppColors.yellow.withOpacity(0.7), BlendMode.srcIn),
+                      );
+                    } catch (e) {
+                      return const Icon(Icons.error, color: AppColors.black);
+                    }
+                  },
                 ),
-                label: Text(
-                  "Login With Google",
-                  style: TextStyle(fontSize: 16.sp),
-                ),
-              ),
-            ),
-            SizedBox(height: 30.h),
-
-            // Flags
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(6.w),
-                decoration: BoxDecoration(
-                  color: AppColors.black,
-                  border: Border.all(color: AppColors.yellow, width: 2.w),
-                  borderRadius: BorderRadius.circular(30.r),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    SvgFlag(assetPath: "assets/images/english.svg", radius: 20),
-                    SizedBox(width: 8),
-                    SvgFlag(assetPath: "assets/images/eg.svg", radius: 20),
-                  ],
-                ),
+                label: Text("Login With Google", style: TextStyle(fontSize: 16.sp)),
               ),
             ),
           ],

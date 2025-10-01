@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:movie/screens/home/profile_tab.dart';
 import 'package:movie/screens/home/search_tab.dart';
-
 import '../../core/colors_manger/colors.dart';
 import 'explore_tab.dart';
 import 'home_tab.dart';
@@ -17,11 +16,17 @@ class HomeScreenTab extends StatefulWidget {
 class _HomeScreenTabState extends State<HomeScreenTab> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs = const [
-    HomeTab(),
-    SearchTab(),
-    ExploreTab(),
-    ProfileTab(),
+  void _setIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  late final List<Widget> _tabs = [
+    HomeTab(onSeeMorePressed: () => _setIndex(2)),
+    const SearchTab(),
+    const ExploreTab(),
+    const ProfileTab(),
   ];
 
   @override
@@ -29,7 +34,6 @@ class _HomeScreenTabState extends State<HomeScreenTab> {
     return Scaffold(
       backgroundColor: AppColors.black,
       body: _tabs[_currentIndex],
-
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 9.h),
         decoration: BoxDecoration(
@@ -47,11 +51,7 @@ class _HomeScreenTabState extends State<HomeScreenTab> {
           borderRadius: BorderRadius.circular(20.r),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
+            onTap: _setIndex,
             type: BottomNavigationBarType.fixed,
             backgroundColor: AppColors.grey,
             elevation: 0,
@@ -68,5 +68,4 @@ class _HomeScreenTabState extends State<HomeScreenTab> {
       ),
     );
   }
-
 }
